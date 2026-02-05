@@ -25,6 +25,10 @@ mongoose
 const UserSchema = new mongoose.Schema({
   email: String,
   password: String,
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const User = mongoose.model("User", UserSchema);
@@ -43,9 +47,64 @@ app.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Incorrect password" });
     }
 
-    res.json({ message: "Login successful", userId: user._id });
+    console.log("userId:", user._id);
+    console.log("userIdAdmin:", user.isAdmin);
+
+    res.json({
+      message: "Login successful",
+      userId: user._id,
+      userIsAdmin: user.isAdmin,
+    });
   } catch (err) {
     console.error("DB query error:", err);
     res.status(500).json({ message: "Database error" });
   }
+});
+
+// admin control
+const adminOnly = async (req, res, next) => {
+  const userId = req.header("x-user-id");
+
+  if (!userId) {
+    return res.status(401).json({ message: "No user ID provided" });
+  }
+
+  const user = await User.findById(userId);
+
+  if (!user || !user.isAdmin) {
+    return res.status(403).json({ message: "Admin access required" });
+  }
+
+  next();
+};
+
+app.get("/admin/users", adminOnly, async (req, res) => {
+  const users = await User.find({}, "-password");
+  res.json(users);
+});
+
+app.post("/admin/users", adminOnly, async (req, res) => {
+  const { email, password, isAdmin } = req.body;
+
+  const user = new User({ email, password, isAdmin });
+  await user.save();
+
+  res.json(user);
+});
+
+app.put("/admin/users/:id", adminOnly, async (req, res) => {
+  const { email, isAdmin } = req.body;
+
+  const user = await User.findByIdAndUpdate(
+    req.params.id,
+    { email, isAdmin },
+    { new: true }
+  );
+
+  res.json(user);
+});
+
+app.delete("/admin/users/:id", adminOnly, async (req, res) => {
+  await User.findByIdAndDelete(req.params.id);
+  res.json({ message: "User deleted" });
 });

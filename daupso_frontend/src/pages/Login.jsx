@@ -31,6 +31,16 @@ function Login() {
 
       // success
       console.log("Logged in user:", data.userId);
+      // store user id in localStorage
+      localStorage.setItem("userId", data.userId);
+
+      // if admin go to admin page
+      if (data.userIsAdmin) {
+        navigate("/admin");
+        return;
+      }
+      console.log("User not admin");
+
       navigate("/"); // go home
     } catch (err) {
       setError("Server error:", err.message);
