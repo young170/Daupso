@@ -31,7 +31,65 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
+// Product Schema
+const ProductSchema = new mongoose.Schema({
+  name: String, 
+  price: Number,
+  category: String,
+  description: String,
+});
+
 const User = mongoose.model("User", UserSchema);
+const Product = mongoose.model("Products", ProductSchema)   // create product schema
+
+// Seed Products POST method for testing
+app.post("/seed-products", async (req, res) => {
+  try {
+    await Product.deleteMany({}); // clear old sample data
+
+    const sampleProducts = [
+      {
+        name: "Nike Running Shoes",
+        price: 120,
+        category: "Shoes",
+        description: "Comfortable running shoes",
+      },
+      {
+        name: "Adidas Hoodie",
+        price: 80,
+        category: "Clothing",
+        description: "Warm hoodie",
+      },
+      {
+        name: "iPhone Case",
+        price: 25,
+        category: "Accessories",
+        description: "Shockproof phone case",
+      },
+    ];
+
+    await Product.insertMany(sampleProducts);
+
+    res.json({ message: "Sample products inserted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET method for searching products
+app.get("/products/search", async (req, res) => {
+  const query = req.query.q;
+
+  try {
+    const products = await Product.find({
+      name: { $regex: query, $options: "i" }, // case-insensitive
+    });
+
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ message: "Search error" });
+  }
+});
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
