@@ -171,3 +171,29 @@ app.delete("/admin/users/:id", adminOnly, async (req, res) => {
   await User.findByIdAndDelete(req.params.id);
   res.json({ message: "User deleted" });
 });
+
+// -------------------------
+// ADMIN PRODUCTS CRUD
+// -------------------------
+app.get("/admin/products", adminOnly, async (req, res) => {
+  const products = await Product.find();
+  res.json(products);
+});
+
+app.post("/admin/products", adminOnly, async (req, res) => {
+  const product = new Product(req.body);
+  await product.save();
+  res.json(product);
+});
+
+app.put("/admin/products/:id", adminOnly, async (req, res) => {
+  const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  });
+  res.json(product);
+});
+
+app.delete("/admin/products/:id", adminOnly, async (req, res) => {
+  await Product.findByIdAndDelete(req.params.id);
+  res.json({ message: "Product deleted" });
+});
