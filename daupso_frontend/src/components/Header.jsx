@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./Header.css";
 
-
-function Header() {
+function Header({ cartCount }) {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -29,7 +28,10 @@ function Header() {
 
         <div className="right">
           <button onClick={() => navigate("/login")}>Login</button>
-          <div className="cart">🛒 <span className="count">0</span></div>
+
+          <div className="cart">
+            🛒 <span className="count">{cartCount}</span>
+          </div>
         </div>
       </div>
     </header>

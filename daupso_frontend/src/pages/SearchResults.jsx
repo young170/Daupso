@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import "./SearchResults.css";
 
-function SearchResults() {
+function SearchResults({ setCartCount }) {
   const [products, setProducts] = useState([]);
   const location = useLocation();
 
@@ -28,6 +28,13 @@ function SearchResults() {
             <p>${product.price}</p>
             <p>{product.category}</p>
             <p>{product.description}</p>
+        
+            <button
+              className="add-cart-btn"
+              onClick={() => setCartCount(prev => prev + 1)}
+            >
+              Add to Cart
+            </button>
           </div>
         ))
       )}
