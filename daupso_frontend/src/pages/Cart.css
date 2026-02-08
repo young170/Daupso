@@ -1,0 +1,26 @@
+.cart-container {
+    padding: 40px;
+  }
+  
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    background: white;
+  }
+  
+  .cart-controls button {
+    margin: 0 5px;
+    padding: 5px 10px;
+  }
+  
+  .delete-btn {
+    background: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
