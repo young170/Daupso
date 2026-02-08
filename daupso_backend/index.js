@@ -33,14 +33,14 @@ const UserSchema = new mongoose.Schema({
 
 // Product Schema
 const ProductSchema = new mongoose.Schema({
-  name: String, 
+  name: String,
   price: Number,
   category: String,
   description: String,
 });
 
 const User = mongoose.model("User", UserSchema);
-const Product = mongoose.model("Products", ProductSchema)   // create product schema
+const Product = mongoose.model("Products", ProductSchema); // create product schema
 
 // Seed Products POST method for testing
 app.post("/seed-products", async (req, res) => {
@@ -127,7 +127,12 @@ const adminOnly = async (req, res, next) => {
     return res.status(401).json({ message: "No user ID provided" });
   }
 
-  const user = await User.findById(userId);
+  let user;
+  try {
+    user = await User.findById(userId);
+  } catch {
+    return res.status(401).json({ message: "Invalid user ID" });
+  }
 
   if (!user || !user.isAdmin) {
     return res.status(403).json({ message: "Admin access required" });

@@ -33,6 +33,7 @@ function Login() {
       console.log("Logged in user:", data.userId);
       // store user id in localStorage
       localStorage.setItem("userId", data.userId);
+      localStorage.setItem("userIsAdmin", data.userIsAdmin);
 
       // if admin go to admin page
       if (data.userIsAdmin) {
