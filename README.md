@@ -46,6 +46,18 @@ cd daupso_frontend
 npm run dev
 ```
 
+## Screenshots
+
+Home
+
+```markdown
+![Home Page](https://github.com/young170/Daupso/blob/main/daupso_frontend/src/assets/HOME.PNG)
+
+![Search Page](https://github.com/young170/Daupso/blob/main/daupso_frontend/src/assets/SEARCH.PNG)
+
+![Cart Page](https://github.com/young170/Daupso/blob/main/daupso_frontend/src/assets/CART.PNG)
+```
+
 ## Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request.
